@@ -1,0 +1,35 @@
+{
+  "name": "whatsapp-send-api",
+  "version": "0.0.3",
+  "description": "A NodeJS API wrapper for whatsapp-web.js",
+  "main": "api.js",
+  "scripts": {
+    "start": "node api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayustark/whatsapp-node-api.git"
+  },
+  "keywords": [
+    "whatsapp-api",
+    "whatsapp",
+    "whatsapp-web",
+    "whatsapp"
+  ],
+  "author": "Pranav M S",
+  "license": "CC-BY-NC",
+  "bugs": {
+    "url": "https://github.com/ayustark/whatsapp-node-api/issues"
+  },
+  "homepage": "https://github.com/ayustark/whatsapp-node-api#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "child_process": "^1.0.2",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "shelljs": "^0.8.4",
+    "whatsapp-web.js": "^1.14.0"
+  }
+}
