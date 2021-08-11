@@ -53,25 +53,32 @@ function deleteQr(res) {
     })
 }
 
-router.get("/reset", async (req, res) => {
-
-    fs.unlink("./session.json", async (err) => {
-        if (err) {
-            deleteQr((qr) => {
-                res.status(400).json({
-                    "last.qr delete": qr,
-                    "session.json delete": err.message
+router.get("/reset/:auth", async (req, res) => {
+    const auth = req.params.auth;
+    if (auth === process.env.authToken) {
+        fs.unlink("./session.json", async (err) => {
+            if (err) {
+                deleteQr((qr) => {
+                    res.status(400).json({
+                        "last.qr delete": qr,
+                        "session.json delete": err.message
+                    })
                 })
-            })
-        } else {
-            deleteQr((qr)=>{
-                res.status(200).json({
-                    "last.qr delete": qr,
-                    "session.json delete": "Session.json deleted successfully"
+            } else {
+                deleteQr((qr) => {
+                    res.status(200).json({
+                        "last.qr delete": qr,
+                        "session.json delete": "Session.json deleted successfully"
+                    })
                 })
-            })
-        }
-    })
+            }
+        })
+    }else{
+        res.status(410).json({
+            "Authentication": "Failed to authenticate",
+            "message": "Contact Developer"
+        })
+    }
 })
 
 module.exports = router;

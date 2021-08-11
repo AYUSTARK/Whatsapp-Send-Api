@@ -6,3 +6,4 @@ components/last.qr
 package-lock.json
 /.idea
 .idea
+.env
