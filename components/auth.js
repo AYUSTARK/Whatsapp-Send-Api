@@ -17,15 +17,17 @@ router.get('/checkauth', async (req, res) => {
     })
 });
 
-router.get('/getqr', (req, res) => {
-    const qrjs = fs.readFileSync('components/qrcode.js');
-    fs.readFile('components/last.qr', (err, last_qr) => {
-        fs.readFile('session.json', (serr, sessiondata) => {
-            if (err && sessiondata) {
-                res.write("<html><body><h2>Already Authenticated</h2></body></html>");
-                res.end();
-            } else if (!err && serr) {
-                const page = `
+router.get('/getqr/:auth', (req, res) => {
+    const auth = req.params.auth;
+    if (auth === process.env.qrAuthToken) {
+        const qrjs = fs.readFileSync('components/qrcode.js');
+        fs.readFile('components/last.qr', (err, last_qr) => {
+            fs.readFile('session.json', (serr, sessiondata) => {
+                if (err && sessiondata) {
+                    res.write("<html><body><h2>Already Authenticated</h2></body></html>");
+                    res.end();
+                } else if (!err && serr) {
+                    const page = `
                     <html>
                         <body>
                             <script>${qrjs}</script>
@@ -36,11 +38,17 @@ router.get('/getqr', (req, res) => {
                         </body>
                     </html>
                 `;
-                res.write(page)
-                res.end();
-            }
+                    res.write(page)
+                    res.end();
+                }
+            })
+        });
+    } else {
+        res.status(410).json({
+            "Authentication": "Failed to authenticate",
+            "message": "Contact Developer"
         })
-    });
+    }
 });
 
 function deleteQr(res) {
@@ -55,7 +63,8 @@ function deleteQr(res) {
 
 router.get("/reset/:auth", async (req, res) => {
     const auth = req.params.auth;
-    if (auth === process.env.authToken) {
+    console.log("RESET", auth, process.env.resetAuthToken)
+    if (auth === process.env.resetAuthToken) {
         fs.unlink("./session.json", async (err) => {
             if (err) {
                 deleteQr((qr) => {
@@ -73,7 +82,7 @@ router.get("/reset/:auth", async (req, res) => {
                 })
             }
         })
-    }else{
+    } else {
         res.status(410).json({
             "Authentication": "Failed to authenticate",
             "message": "Contact Developer"
